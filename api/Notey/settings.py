@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
-import dj_database_url
+from datetime import timedelta
+
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,9 +21,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'corsheaders',  # Add CORS
-    'notes',  # Your app
+    'notes',
+    'Users'  # Your app
 ]
 
 MIDDLEWARE = [
@@ -34,11 +37,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
@@ -62,7 +65,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Notey.wsgi.application'
 
-AUTH_USER_MODEL = 'notes.CustomUser'  # Replace with your app and model name
+AUTH_USER_MODEL = 'Users.CustomUser'  # Replace with your app and model name
 
 # Database
 # DATABASES = {
@@ -71,9 +74,16 @@ AUTH_USER_MODEL = 'notes.CustomUser'  # Replace with your app and model name
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Check this line
         'NAME': BASE_DIR / "db.sqlite3",
     }
+}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # Token expires after 1 hour
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Refresh token expires after 7 days
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
 }
 
 
