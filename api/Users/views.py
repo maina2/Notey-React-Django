@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -54,6 +55,7 @@ class LoginView(APIView):
 
 
 # Protected Route: Get Current User (Requires Authentication)
+@csrf_exempt
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]  # Only logged-in users can access
 
