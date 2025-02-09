@@ -1,7 +1,6 @@
 from pathlib import Path
 import os
 from datetime import timedelta
-from datetime import timedelta
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,11 +22,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    'corsheaders',  # Add CORS
+    'corsheaders',
+    'Users',  
     'notes',
-    'Users',
     'rest_framework_simplejwt.token_blacklist',
-    
 ]
 
 MIDDLEWARE = [
@@ -41,11 +39,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+AUTHENTICATION_BACKENDS = [
+    'Users.models.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 
 SIMPLE_JWT = {
@@ -81,16 +85,11 @@ SIMPLE_JWT = {
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
-    "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
+    "TOKEN_VERIFY_SERIALIZER": "rest_framework.simplejwt.serializers.TokenVerifySerializer",
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
-    "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
-    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
+    "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework.simplejwt.serializers.TokenObtainSlidingSerializer",
+    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework.simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
-# SIMPLE_JWT = {
-#   # It will work instead of the default serializer(TokenObtainPairSerializer).
-#   "TOKEN_OBTAIN_SERIALIZER": "my_app.serializers.MyTokenObtainPairSerializer",
-#   # ...
-# }
 
 ROOT_URLCONF = 'Notey.urls'
 
@@ -112,7 +111,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Notey.wsgi.application'
 
-AUTH_USER_MODEL = 'Users.CustomUser'  # Replace with your app and model name
+AUTH_USER_MODEL = 'Users.CustomUser'
+ # Replace with your app and model name
 
 # Database
 # DATABASES = {
@@ -125,8 +125,6 @@ DATABASES = {
         'NAME': BASE_DIR / "db.sqlite3",
     }
 }
-
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -161,9 +159,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory to store uploaded medi
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS settings
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",  # Replace with your frontend URL
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Replace with your frontend URL
+]
 CORS_ALLOW_CREDENTIALS = True
-
 CORS_ALLOWED_ALL_ORIGINS = True

@@ -1,11 +1,9 @@
-
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-from .models import  CustomUser
 
-User = get_user_model()
+User = get_user_model()  # User now represents your CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
@@ -17,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
-        model = CustomUser
+        model = User  # Use User here
         fields = ['id', 'username', 'email', 'bio', 'profile_picture', 'password', 'password2']
 
     def validate(self, attrs):
